@@ -1,19 +1,24 @@
 ArrayList学习笔记
 
-	arraylist的核心
-		Arrays.copyOf(T[] original, int newLength)-拷贝数组
-			original-要复制的数组 
-			newLength-要返回的副本长度
-		
-		System.arraycopy(Object src,int srcPos,Object dest, int destPos,int length)-复制数组
-			src-源数组
-			srcPos-源数组要复制的起始位置
-			dest-目标数组
-			destPos-目标数组要放置的起始位置
-			length-复制的长度
+非线程安全
+继承了AbstractList
+实现了List、RandomAccess、Cloneable、Serializable接口
+允许null值，随机访问性能较好
+
+arraylist的核心
+	Arrays.copyOf(T[] original, int newLength)-拷贝数组
+		original-要复制的数组 
+		newLength-要返回的副本长度
+	
+	System.arraycopy(Object src,int srcPos,Object dest, int destPos,int length)-复制数组
+		src-源数组
+		srcPos-源数组要复制的起始位置
+		dest-目标数组
+		destPos-目标数组要放置的起始位置
+		length-复制的长度
 
 1.数据结构：
-	arraylist底层为“elementData”的Object[]数组实现
+	arraylist底层为“elementData”的Object[]数组
 	使用transient关键字修饰，使用此关键字修饰的变量的值不会包含在Serialization(序列化)的列表中
 
 2.构造函数：
