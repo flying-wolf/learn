@@ -1,0 +1,16 @@
+1.String str = new String("134") 生成几个对象
+2.abstract class 与 interfac 有什么不同
+3.有三个线程，T1,T2,T3,如何实现线程T2在线程T1之后执行，T3在T2之后执行
+4.数据库分页实现，mysql：？ oracle？
+5，线程题，运行结果
+6.代码实现a的阶乘(递归实现)
+7，spring 事务的实现方式有哪些
+8.实际项目中用到过哪些设计模式，应用场景是什么
+9.实际项目中用到过哪些数据库缓存，应用场景是什么？解决了什么问题，这些缓存有什么区别
+10，myBatis 映射的dao接口，他的原理是什么，里面的方法如果有不同的参数，是否可以重载
+11，设计一个高并发的接口API
+12.有20瓶药，每瓶装有1g/粒的药，其中有一瓶装有1.1g/粒的药，现在有一个精准度比较高的天平，
+如何找出其中装有1.1g/粒的药瓶。天平只可以使用一次
+
+线程题：
+https://github.com/evoleht/learn/blob/master/learning/src/main/java/com/evoleht/thread/interview/ThreadTest.java

@@ -1,0 +1,36 @@
+1.运行结果
+https://github.com/evoleht/learn/blob/master/learning/src/main/java/com/evoleht/interview/interviewclass/extend/Test.java
+
+2.重载、重写区别？返回类型是否可以修改
+3.final 可以修饰什么？代表什么意思
+4. 三张表，学生表，选课表，课程成绩表
+   1）创建表 age 默认20、性别只可以选男女、主键为学生编号
+   2）查询表 查询学生成绩
+   3）更新表 更新学生年龄为21
+
+5.bean 的生存周期
+
+6.spring bean 的注入方式
+
+7.下面程序是否有问题，没有问题则输出什么
+@service
+public class Service {
+ @Resource
+ Service2 service2;
+  public void method() {
+	service2.method();
+  }
+}
+
+public class Service2 {
+  public void method() {
+
+  }
+}
+
+8.输入一组单词，将单词反转，但是单词顺序不变
+比如 输入 "1234 abcd" 输出 "4321 dcba"
+
+9。两个请求来购买手机，库存量还剩1个，怎么设计才能不超卖
+
+10。两台tomcat集群，设计当用户登录之后才可以查看商城的web页面，没有登录则不能查看

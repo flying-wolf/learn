@@ -1,0 +1,11 @@
+1.自我介绍
+2.项目介绍
+3.根据项目询问技术
+4.memcache 与 redis 的不同
+5.mysql数据库引擎的区别
+6.线程池实现的原理
+7. newSingleThreadExecutor的优点，为什么不自己写个线程，而用这个线程池
+8. 为什么用hession hession的通讯方式，和自己写http有什么不同
+9.索引
+10.redis 的缓存清除原理，lru算法实现
+其它都忘记了
