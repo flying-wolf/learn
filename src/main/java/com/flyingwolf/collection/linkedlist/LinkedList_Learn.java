@@ -46,7 +46,7 @@ import java.util.Queue;
  * 	然后调用addAll()方法将接收到的Collecation参数的全部元素添加到链表中，这些元素按照Collecation迭代器返回顺序排列。
  * 
  * 增加元素方法：
- * 	1.addBefore(E e,entry) 在entry之前插入e构造的新节点，此方法为LinkedList的私有方法也是所有增加元素方法的核心
+ * 	1.addBefore(E e,entry) 在entry之前插入e构造的新节点，此方法为LinkedList的私有方法也是所有插入元素方法的基础方法
  * 	先通过Entry的构造方法创建e的节点newEntry
  * （包含了将其下一个节点设置为entry，上一个节点设置为entry.previous的操作，相当于修改newEntry的“指针”），
  *  之后修改插入位置后newEntry的前一节点的next引用和后一节点的previous引用，
@@ -58,9 +58,29 @@ import java.util.Queue;
  *  5.addLast(E e) 将指定元素插入此列表的尾部
  *  6.addAll(Collection<? extends E> c) 添加指定Collectaion的所有元素添加到此链表的尾部，顺序按照Collecation迭代器返回的顺序添加
  *  7.addAll(int index, Collection<? extends E> c) 将指定Collecation中的所有元素从链表的指定位置开始添加
+ *  8.jdk1.6中新增offerFirst(),offerLast()方法代替原来的addFirst(),addLast()方法,
+ *  区别在于新方法在向一个有容量限制并且已经满了的队列中添加元素时返回false,而旧方法只会抛出异常
  *  
  * 删除元素方法：
- * 	1.remove(Entry<E> e) 移除指定的节点 ，该方法是LinkedList的私有方法,
+ * 	1.remove(Entry<E> e) 移除并返回指定的节点 ，该方法是LinkedList的私有方法,事LinkedList所有移除方法的基础方法，具体实现如下：
+ * 	1).获取被移除的节点，最后返回
+ *  2).将该节点的前一节点的next指向该节点的后一节点
+ *  3).将该节点的后一节点的previous指向该节点的前一节点
+ * 	这两步实现将该节点从链表中剔除
+ * 	4).将该节点置空
+ * 	5).重新计算size
+ * 	6).返回被移除的节点即第1)步获取的节点
+ * 	2.removeFirst() 移除并返回此链表的第一个元素
+ * 	3.removeLast() 移除并返回此链表的最后一个元素
+ * 	4.remove(Object) 移除链表中首次出现的指定元素
+ * 	5.1.6中新增的方法pollFirst(),pollLast(),与offerFirst(),offerLast()目标一致
+ * 
+ * 查找元素方法：
+ * 	1.entry<int index> 根据指定的索引位置查找并返回节点,此方法为私有方法,是所有查找方法的基础方法
+ * 	2.getFisrt() 查找并返回此链表的第一个节点
+ * 	3.getLast() 查找并返回此链表的最后一个节点
+ * 	4.get(int index) 查找并返回指定索引位置的节点
+ * 	5.1.6新增offerFirst() offerLast()方法
  *  
  * 
  * 
@@ -70,93 +90,93 @@ public class LinkedList_Learn<E>
     extends AbstractSequentialList<E>
     implements List<E>, Deque<E>, Cloneable, java.io.Serializable
 {
+	
+    /**
+     * @Field @header : TODO 双向链表的头节点,它是双向链表中Entry的实例
+     */
     private transient Entry<E> header = new Entry<E>(null, null, null);
+    /**
+     * @Field @size : TODO 双向链表中节点数量
+     */
     private transient int size = 0;
 
     /**
-     * Constructs an empty list.
+     * @Description TODO 无参构造函数
      */
     public LinkedList_Learn() {
+    	//头节点的后指针指向头节点前前指针并指向头节点
+    	//其实就是构造一个空的链表
         header.next = header.previous = header;
     }
 
     /**
-     * Constructs a list containing the elements of the specified
-     * collection, in the order they are returned by the collection's
-     * iterator.
-     *
-     * @param  c the collection whose elements are to be placed into this list
-     * @throws NullPointerException if the specified collection is null
+     * @Description TODO 构造一个包含指定Collection所有元素的双向链表,链表元素的排列顺序为Collecation迭代器返回顺序
+     * @param c
      */
     public LinkedList_Learn(Collection<? extends E> c) {
-	this();
-	addAll(c);
+    	//先调用无参构造函数构造一个空链表
+		this();
+		//然后调用addAll(Collection<? extends E> c) 从链表的尾部开始插入Collection包含的所有元素
+		//插入顺序为Collection迭代器返回的元素顺序
+		addAll(c);
     }
 
     /**
-     * Returns the first element in this list.
-     *
-     * @return the first element in this list
-     * @throws NoSuchElementException if this list is empty
+     * @Description (TODO 查找并返回此链表的第一个节点,链表为空时抛出异常)
+     * @return
      */
     public E getFirst() {
-	if (size==0)
-	    throw new NoSuchElementException();
-
-	return header.next.element;
+		if (size==0)
+		    throw new NoSuchElementException();
+	
+		return header.next.element;
     }
 
     /**
-     * Returns the last element in this list.
-     *
-     * @return the last element in this list
-     * @throws NoSuchElementException if this list is empty
+     * @Description (TODO 查找并返回此链表的最后一个节点,链表为空时抛出异常)
+     * @return
      */
     public E getLast()  {
-	if (size==0)
-	    throw new NoSuchElementException();
-
-	return header.previous.element;
+		if (size==0)
+		    throw new NoSuchElementException();
+	
+		return header.previous.element;
     }
 
     /**
-     * Removes and returns the first element from this list.
-     *
-     * @return the first element from this list
-     * @throws NoSuchElementException if this list is empty
+     * @Description (TODO 移除并返回此链表中的第一个节点,此链表为空时抛出异常)
+     * @return
      */
     public E removeFirst() {
-	return remove(header.next);
+    	//移除并返回header后指针指向的节点
+    	return remove(header.next);
     }
 
     /**
-     * Removes and returns the last element from this list.
-     *
-     * @return the last element from this list
-     * @throws NoSuchElementException if this list is empty
+     * @Description (TODO 移除并返回此链表的最后一个节点,此链表为空时抛出异常)
+     * @return
      */
     public E removeLast() {
-	return remove(header.previous);
+    	//移除并返回header前指针指向的节点
+    	return remove(header.previous);
     }
 
     /**
-     * Inserts the specified element at the beginning of this list.
-     *
-     * @param e the element to add
+     * @Description (TODO 将指定元素插入到链表的第一个位置)
+     * @param e
      */
     public void addFirst(E e) {
-	addBefore(e, header.next);
+    	//将指定元素e添加到header节点的下一个节点的前面
+    	addBefore(e, header.next);
     }
 
     /**
-     * Appends the specified element to the end of this list.
-     *
-     * <p>This method is equivalent to {@link #add}.
-     *
-     * @param e the element to add
+     * @Description (TODO 将指定元素添加到此链表的最后)
+     * @param e
      */
     public void addLast(E e) {
-	addBefore(e, header);
+    	//将指定元素e添加到header节点的前面
+    	addBefore(e, header);
     }
 
     /**
@@ -182,108 +202,104 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Appends the specified element to the end of this list.
-     *
-     * <p>This method is equivalent to {@link #addLast}.
-     *
-     * @param e element to be appended to this list
-     * @return <tt>true</tt> (as specified by {@link Collection#add})
+     * @Description (TODO 将指定的元素添加到此链表的最后,并返回true)
+     * @param e
+     * @return
      */
     public boolean add(E e) {
-	addBefore(e, header);
+    	//将指定元素e添加到header节点之前
+    	addBefore(e, header);
+    	//返回true
         return true;
     }
-
+    
     /**
-     * Removes the first occurrence of the specified element from this list,
-     * if it is present.  If this list does not contain the element, it is
-     * unchanged.  More formally, removes the element with the lowest index
-     * <tt>i</tt> such that
-     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>
-     * (if such an element exists).  Returns <tt>true</tt> if this list
-     * contained the specified element (or equivalently, if this list
-     * changed as a result of the call).
-     *
-     * @param o element to be removed from this list, if present
-     * @return <tt>true</tt> if this list contained the specified element
+     * 移除此链表中首次出现的指定元素
      */
     public boolean remove(Object o) {
+    	//判断需要移除的元素是否为null
         if (o==null) {
+        	//循环链表
             for (Entry<E> e = header.next; e != header; e = e.next) {
+            	//找到首次出现的元素为null的节点
                 if (e.element==null) {
+                	//移除该节点并返回true
                     remove(e);
                     return true;
                 }
             }
         } else {
+        	//循环链表
             for (Entry<E> e = header.next; e != header; e = e.next) {
+            	//通过equals方法查找首次出现的元素值相同的节点
                 if (o.equals(e.element)) {
+                	//移除该节点并返回true
                     remove(e);
                     return true;
                 }
             }
         }
+        //如果指定的元素在链表中不存在则返回false
         return false;
     }
 
     /**
-     * Appends all of the elements in the specified collection to the end of
-     * this list, in the order that they are returned by the specified
-     * collection's iterator.  The behavior of this operation is undefined if
-     * the specified collection is modified while the operation is in
-     * progress.  (Note that this will occur if the specified collection is
-     * this list, and it's nonempty.)
-     *
-     * @param c collection containing elements to be added to this list
-     * @return <tt>true</tt> if this list changed as a result of the call
-     * @throws NullPointerException if the specified collection is null
+     * @Description (TODO 从此链表的尾部开始插入指定Collection的所有元素,插入顺序为Collection迭代器返回的元素顺序)
+     * @param c
+     * @return
      */
     public boolean addAll(Collection<? extends E> c) {
+    	//从此链表最后一个节点的下一索引位置添加Collection的所有元素
         return addAll(size, c);
     }
 
     /**
-     * Inserts all of the elements in the specified collection into this
-     * list, starting at the specified position.  Shifts the element
-     * currently at that position (if any) and any subsequent elements to
-     * the right (increases their indices).  The new elements will appear
-     * in the list in the order that they are returned by the
-     * specified collection's iterator.
-     *
-     * @param index index at which to insert the first element
-     *              from the specified collection
-     * @param c collection containing elements to be added to this list
-     * @return <tt>true</tt> if this list changed as a result of the call
-     * @throws IndexOutOfBoundsException {@inheritDoc}
-     * @throws NullPointerException if the specified collection is null
+     * @Description (TODO 从此链表的指定位置开始插入指定Collection中的所有元素,插入顺序为Collection迭代器返回的元素顺序)
+     * @param index
+     * @param c
+     * @return
      */
     public boolean addAll(int index, Collection<? extends E> c) {
+    	//检查索引是否正确
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException("Index: "+index+
                                                 ", Size: "+size);
+        //Collection转数组
         Object[] a = c.toArray();
+        //需要添加的元素数量
         int numNew = a.length;
+        //数量验证
         if (numNew==0)
             return false;
-	modCount++;
+        
+        //操作次数+1
+        modCount++;
 
+        //获取需要添加节点的后指针指向
         Entry<E> successor = (index==size ? header : entry(index));
+        //获取需要添加节点的前指针指向
         Entry<E> predecessor = successor.previous;
-	for (int i=0; i<numNew; i++) {
+        //循环Collection的所有元素
+        for (int i=0; i<numNew; i++) {
+        	//根据Collection的每一个元素构造节点
             Entry<E> e = new Entry<E>((E)a[i], successor, predecessor);
+            //修改前指针指向
             predecessor.next = e;
             predecessor = e;
         }
+        //修改后指针引用
         successor.previous = predecessor;
-
+        //容量+collection容量
         size += numNew;
+        //返回true
         return true;
     }
 
     /**
-     * Removes all of the elements from this list.
+     * @Description (TODO 清空链表中的所有节点)
      */
     public void clear() {
+    	//循环所有节点置空节点元素
         Entry<E> e = header.next;
         while (e != header) {
             Entry<E> next = e.next;
@@ -291,20 +307,21 @@ public class LinkedList_Learn<E>
             e.element = null;
             e = next;
         }
+        //重新修改header前后指针指向header自身
         header.next = header.previous = header;
+        //清空容量
         size = 0;
-	modCount++;
+        //操作计数+1
+        modCount++;
     }
 
 
     // Positional Access Operations
 
     /**
-     * Returns the element at the specified position in this list.
-     *
-     * @param index index of the element to return
-     * @return the element at the specified position in this list
-     * @throws IndexOutOfBoundsException {@inheritDoc}
+     * @Description (TODO 查找并返回指定索引位置的节点)
+     * @param index
+     * @return
      */
     public E get(int index) {
         return entry(index).element;
@@ -327,39 +344,41 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Inserts the specified element at the specified position in this list.
-     * Shifts the element currently at that position (if any) and any
-     * subsequent elements to the right (adds one to their indices).
-     *
-     * @param index index at which the specified element is to be inserted
-     * @param element element to be inserted
-     * @throws IndexOutOfBoundsException {@inheritDoc}
+     * @Description (TODO 将指定元素添加到此链表的指定索引位置)
+     * @param index
+     * @param element
      */
     public void add(int index, E element) {
+    	//分为两种情况:
+    	//1).链表为空时将指定的元素添加到header节点之前
+    	//2).链表非空时将指定元素添加到指定索引位置的节点之前
         addBefore(element, (index==size ? header : entry(index)));
     }
 
     /**
-     * Removes the element at the specified position in this list.  Shifts any
-     * subsequent elements to the left (subtracts one from their indices).
-     * Returns the element that was removed from the list.
-     *
-     * @param index the index of the element to be removed
-     * @return the element previously at the specified position
-     * @throws IndexOutOfBoundsException {@inheritDoc}
+     * @Description (TODO 移除并返回指定索引位置的节点)
+     * @param index
+     * @return
      */
     public E remove(int index) {
+    	//移除并返回指定索引位置的节点
         return remove(entry(index));
     }
 
     /**
-     * Returns the indexed entry.
+     * @Description (TODO 查找并返回指定索引位置的节点)
+     * @param index
+     * @return
      */
     private Entry<E> entry(int index) {
+    	//索引检查
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: "+index+
                                                 ", Size: "+size);
+        //获取header节点
         Entry<E> e = header;
+        //将链表分为左右两部分,根据索引循环所在的半个链表
+        //这样做的目的是为了提高性能,最多只需循半个链表
         if (index < (size >> 1)) {
             for (int i = 0; i <= index; i++)
                 e = e.next;
@@ -466,11 +485,8 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Retrieves and removes the head (first element) of this list.
-     *
-     * @return the head of this list
-     * @throws NoSuchElementException if this list is empty
-     * @since 1.5
+     * @Description (TODO 移除并返回此链表的第一个节点)
+     * @return
      */
     public E remove() {
         return removeFirst();
@@ -489,11 +505,11 @@ public class LinkedList_Learn<E>
 
     // Deque operations
     /**
-     * Inserts the specified element at the front of this list.
-     *
-     * @param e the element to insert
-     * @return <tt>true</tt> (as specified by {@link Deque#offerFirst})
-     * @since 1.6
+     * @Description (TODO 将指定元素添加到双端队列的最前面,并返回添加状态,
+     * 				此方法与addFirst()方法的区别在于向一个容量有限且已满的双端队列中添加元素时前者会返回false,
+     * 				后者抛出异常)
+     * @param e
+     * @return
      */
     public boolean offerFirst(E e) {
         addFirst(e);
@@ -501,11 +517,11 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Inserts the specified element at the end of this list.
-     *
-     * @param e the element to insert
-     * @return <tt>true</tt> (as specified by {@link Deque#offerLast})
-     * @since 1.6
+     * @Description (TODO 将指定元素添加到双端队列的尾部,并返回添加状态,
+     * 				此方法与addLast()方法的区别在于向一个容量有限且已满的双端队列中添加元素时前者会返回false,
+     * 				后者抛出异常)
+     * @param e
+     * @return
      */
     public boolean offerLast(E e) {
         addLast(e);
@@ -541,12 +557,8 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Retrieves and removes the first element of this list,
-     * or returns <tt>null</tt> if this list is empty.
-     *
-     * @return the first element of this list, or <tt>null</tt> if
-     *     this list is empty
-     * @since 1.6
+     * @Description (TODO 移除并返回链表的第一个节点,如果链表为空则返回null)
+     * @return
      */
     public E pollFirst() {
         if (size==0)
@@ -555,12 +567,8 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Retrieves and removes the last element of this list,
-     * or returns <tt>null</tt> if this list is empty.
-     *
-     * @return the last element of this list, or <tt>null</tt> if
-     *     this list is empty
-     * @since 1.6
+     * @Description (TODO 移除并返回链表的最后一个节点,如果链表为空则返回null)
+     * @return
      */
     public E pollLast() {
         if (size==0)
@@ -769,26 +777,52 @@ public class LinkedList_Learn<E>
 	}
     }
 
+    /**
+     * @Description (TODO 在指定节点之前添加指定元素,并返回新增节点)
+     * @param e
+     * @param entry 
+     * @return
+     */
     private Entry<E> addBefore(E e, Entry<E> entry) {
-	Entry<E> newEntry = new Entry<E>(e, entry, entry.previous);
-	newEntry.previous.next = newEntry;
-	newEntry.next.previous = newEntry;
-	size++;
-	modCount++;
-	return newEntry;
+    	//根据e构造新的节点newEntry
+    	//newEntry的后指针指向entry
+    	//newEntry的前指针指向entry的前指针
+		Entry<E> newEntry = new Entry<E>(e, entry, entry.previous);
+		//修改newEntry的前后指针引用
+		//newEntry的前指针指向的节点的后指针指向newEntry
+		newEntry.previous.next = newEntry;
+		//newEntry的后指针指向的节点的前指针指向newEntry
+		newEntry.next.previous = newEntry;
+		//容量+1
+		size++;
+		//操作次数+1
+		modCount++;
+		//返回新节点
+		return newEntry;
     }
 
+    /**
+     * @Description (TODO 移除并返回指定的节点)
+     * @param e
+     * @return
+     */
     private E remove(Entry<E> e) {
-	if (e == header)
-	    throw new NoSuchElementException();
-
-        E result = e.element;
-	e.previous.next = e.next;
-	e.next.previous = e.previous;
+    	//如果链表为空抛出异常
+		if (e == header)
+		    throw new NoSuchElementException();
+		//得到需要移除的节点
+	    E result = e.element;
+	    //修改e的前后指针指向
+		e.previous.next = e.next;
+		e.next.previous = e.previous;
+		//置空节点元素
         e.next = e.previous = null;
         e.element = null;
-	size--;
-	modCount++;
+        //容量-1
+		size--;
+		//操作计数+1
+		modCount++;
+		//返回被移除的节点
         return result;
     }
 
