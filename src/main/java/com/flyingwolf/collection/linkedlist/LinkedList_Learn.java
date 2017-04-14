@@ -60,6 +60,7 @@ import java.util.Queue;
  *  7.addAll(int index, Collection<? extends E> c) 将指定Collecation中的所有元素从链表的指定位置开始添加
  *  8.jdk1.6中新增offerFirst(),offerLast()方法代替原来的addFirst(),addLast()方法,
  *  区别在于新方法在向一个有容量限制并且已经满了的队列中添加元素时返回false,而旧方法只会抛出异常
+ *  9.set(int index,E element) 替换并返回指定索引位置的节点元素
  *  
  * 删除元素方法：
  * 	1.remove(Entry<E> e) 移除并返回指定的节点 ，该方法是LinkedList的私有方法,事LinkedList所有移除方法的基础方法，具体实现如下：
@@ -76,14 +77,16 @@ import java.util.Queue;
  * 	5.1.6中新增的方法pollFirst(),pollLast(),与offerFirst(),offerLast()目标一致
  * 
  * 查找元素方法：
- * 	1.entry<int index> 根据指定的索引位置查找并返回节点,此方法为私有方法,是所有查找方法的基础方法
+ * 	1.entry(int index) 根据指定的索引位置查找并返回节点,此方法为私有方法,是所有查找方法的基础方法
  * 	2.getFisrt() 查找并返回此链表的第一个节点
  * 	3.getLast() 查找并返回此链表的最后一个节点
  * 	4.get(int index) 查找并返回指定索引位置的节点
  * 	5.1.6新增offerFirst() offerLast()方法
  *  
- * 
- * 
+ * 其他方法：
+ * 	1.indexOf(Object o) 查找并返回此链表中首次出现的节点元素值与指定Object对象值相等的索引,如果没找到则返回-1
+ * 	2.lastIndexOf(Object o) 查找并返回此链表中最后一次出现的节点值与指定Object对象值相等的索引,如果没找到则返回-1
+ * 	3.contains(Object o) 判断此链表中是否存在指定的Object对象
  * 
  */
 public class LinkedList_Learn<E>
@@ -180,15 +183,11 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Returns <tt>true</tt> if this list contains the specified element.
-     * More formally, returns <tt>true</tt> if and only if this list contains
-     * at least one element <tt>e</tt> such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
-     *
-     * @param o element whose presence in this list is to be tested
-     * @return <tt>true</tt> if this list contains the specified element
+     * @Description (TODO 判断指定的Object对象在此链表中是否存在)
+     * @param o
      */
     public boolean contains(Object o) {
+    	//调用indexOf查找o在链表中首次出现的索引方法,如果返回索引不等于-1则说明链表中存在o
         return indexOf(o) != -1;
     }
 
@@ -328,18 +327,18 @@ public class LinkedList_Learn<E>
     }
 
     /**
-     * Replaces the element at the specified position in this list with the
-     * specified element.
-     *
-     * @param index index of the element to replace
-     * @param element element to be stored at the specified position
-     * @return the element previously at the specified position
-     * @throws IndexOutOfBoundsException {@inheritDoc}
+     * @Description (TODO 替换并返回指定索引位置的节点元素)
+     * @param index
+     * @param element
      */
     public E set(int index, E element) {
+    	//获取指定索引位置的节点e
         Entry<E> e = entry(index);
+        //获取e的元素
         E oldVal = e.element;
+        //替换e的元素为指定的新元素
         e.element = element;
+        //返回被替换的节点元素
         return oldVal;
     }
 
@@ -391,62 +390,63 @@ public class LinkedList_Learn<E>
 
 
     // Search Operations
-
     /**
-     * Returns the index of the first occurrence of the specified element
-     * in this list, or -1 if this list does not contain the element.
-     * More formally, returns the lowest index <tt>i</tt> such that
-     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>,
-     * or -1 if there is no such index.
-     *
-     * @param o element to search for
-     * @return the index of the first occurrence of the specified element in
-     *         this list, or -1 if this list does not contain the element
+     * @Description (TODO 查找并返回指定的Object对象在此链表中首次出现位置的索引)
+     * @param o
+     * @return int
      */
     public int indexOf(Object o) {
-        int index = 0;
+        int index = 0;//索引从0开始
+        //判断o是否为null
         if (o==null) {
+        	//循环链表查找到第一次出现的元素为null的节点
             for (Entry e = header.next; e != header; e = e.next) {
+            	//查找到第一次出现的元素为null的节点,并返回其索引
                 if (e.element==null)
                     return index;
+                //索引+1
                 index++;
             }
         } else {
+        	//循环链表查找到第一次出现的元素值与o值相等的节点
             for (Entry e = header.next; e != header; e = e.next) {
+            	//查找到第一次出现的元素值与o值相等的节点,并返回器索引
                 if (o.equals(e.element))
                     return index;
+                //索引+1
                 index++;
             }
         }
+        //若链表中不包含节点元素值与o值相同的元素则返回-1
         return -1;
     }
 
     /**
-     * Returns the index of the last occurrence of the specified element
-     * in this list, or -1 if this list does not contain the element.
-     * More formally, returns the highest index <tt>i</tt> such that
-     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>,
-     * or -1 if there is no such index.
-     *
-     * @param o element to search for
-     * @return the index of the last occurrence of the specified element in
-     *         this list, or -1 if this list does not contain the element
+     * @Description (TODO 查找并返回此链表中最后一次出现的节点值与指定Object对象值相等的索引,如果没找到则返回-1)
+     * @param o
+     * @return int
      */
     public int lastIndexOf(Object o) {
-        int index = size;
+        int index = size;//索引默认为链表容量
+        //判断o的值是否为null
         if (o==null) {
+        	//循环链表,从链表的尾部开始循环,第一次出现的值为null的节点在链表中就是最后一次出现的节点
             for (Entry e = header.previous; e != header; e = e.previous) {
-                index--;
+                index--;//索引从链表最后一个节点开始
+                //查找到返回索引
                 if (e.element==null)
                     return index;
             }
         } else {
+        	//循环链表,从链表的尾部开始循环,第一次出现的值为o的节点在链表中就是最后一次出现的节点
             for (Entry e = header.previous; e != header; e = e.previous) {
-                index--;
+                index--;//索引从链表最后一个节点开始
+                //查找到返回索引
                 if (o.equals(e.element))
                     return index;
             }
         }
+        //不存在则返回-1
         return -1;
     }
 
