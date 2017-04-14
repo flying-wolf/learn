@@ -1,4 +1,4 @@
-package com.flyingwolf.collection.hashmap;
+package com.flyingwolf.javacode.collection.hashmap;
 
 public class HashMapDemo {
 

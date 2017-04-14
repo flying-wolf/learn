@@ -1,4 +1,4 @@
-package com.flyingwolf.io.utils;
+package com.flyingwolf.javacode.io.utils;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

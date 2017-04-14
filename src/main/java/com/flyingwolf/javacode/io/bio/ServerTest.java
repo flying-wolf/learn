@@ -1,4 +1,4 @@
-package com.flyingwolf.io.bio;
+package com.flyingwolf.javacode.io.bio;
 
 public class ServerTest {
 

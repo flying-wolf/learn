@@ -1,4 +1,4 @@
-package com.flyingwolf.collection.arraylist;
+package com.flyingwolf.javacode.collection.arraylist;
 
 import java.util.ArrayList;
 import java.util.Arrays;

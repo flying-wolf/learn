@@ -1,4 +1,4 @@
-package com.flyingwolf.arrays;
+package com.flyingwolf.javacode.arrays;
 
 public class ArraysDemo {
 	

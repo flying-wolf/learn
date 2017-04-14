@@ -1,4 +1,4 @@
-package com.flyingwolf.io.bio;
+package com.flyingwolf.javacode.io.bio;
 
 import java.io.BufferedReader;
 import java.io.IOException;

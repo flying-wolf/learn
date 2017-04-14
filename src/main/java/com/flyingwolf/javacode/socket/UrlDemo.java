@@ -1,4 +1,4 @@
-package com.flyingwolf.socket;
+package com.flyingwolf.javacode.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;

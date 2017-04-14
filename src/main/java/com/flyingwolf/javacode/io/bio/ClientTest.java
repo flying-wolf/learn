@@ -1,11 +1,10 @@
-package com.flyingwolf.socket.socketdemo;
+package com.flyingwolf.javacode.io.bio;
 
-public class Test {
+public class ClientTest {
 
 	public static void main(String[] args) {
 		try {
-			Server.start();
-			Client.send();
+			Client.send("33-4");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

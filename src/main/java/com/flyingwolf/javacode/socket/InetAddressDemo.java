@@ -1,4 +1,4 @@
-package com.flyingwolf.socket;
+package com.flyingwolf.javacode.socket;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

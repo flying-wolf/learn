@@ -1,4 +1,4 @@
-package com.flyingwolf.collection.linkedlist;
+package com.flyingwolf.javacode.collection.linkedlist;
 
 import java.util.AbstractSequentialList;
 import java.util.Collection;

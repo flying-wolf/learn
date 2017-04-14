@@ -1,4 +1,4 @@
-package com.flyingwolf.interview.code;
+package com.flyingwolf.javacode.interview.code;
 
 public class ExtendsClassDemo {
 	class ClassA {

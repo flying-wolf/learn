@@ -1,4 +1,4 @@
-package com.flyingwolf.io.bio;
+package com.flyingwolf.javacode.io.bio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.flyingwolf.io.utils.Calculator;
+import com.flyingwolf.javacode.io.utils.Calculator;
 
 /**
  * 客户端线程
