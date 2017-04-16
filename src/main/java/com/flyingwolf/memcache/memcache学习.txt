@@ -33,3 +33,16 @@ http://blog.csdn.net/gxl0805/article/details/8969853
 http://calixwu.com/2014/11/memcached-yuanmafenxi-neicunguanli.html
 
 http://blog.chinaunix.net/uid-28781890-id-3566082.html
+
+
+
+http://calixwu.com/2014/11/memcached-yuanmafenxi.html
+
+
+
+
+
+
+
+
+

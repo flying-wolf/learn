@@ -24,3 +24,16 @@ MemCache的原理
 	3).每个page里面包含一组chunk,chunk是真正存放数据的空间,同一个slab下面的chunk大小是固定的。
 	4).有相同大小chunk的slab被组织在一起，称为slab_class。
 	
+	
+
+	
+	
+	
+	
+	
+MemCached线程模型关键字理解
+	event_base:
+	fd-file desciptor:
+	
+	
+MemCached-TCP/IP通信——socket()，listen()，bind()，accept()
