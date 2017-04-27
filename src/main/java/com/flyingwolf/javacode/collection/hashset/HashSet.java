@@ -7,7 +7,6 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -85,6 +84,7 @@ public class HashSet<E>
 {
     static final long serialVersionUID = -5024744406713321676L;
 
+    /** 底层储存结构HashMap **/
     private transient HashMap<E,Object> map;
 
     // Dummy value to associate with an Object in the backing Map
@@ -268,8 +268,8 @@ public class HashSet<E>
 	s.defaultWriteObject();
 
         // Write out HashMap capacity and load factor
-        s.writeInt(map.capacity());
-        s.writeFloat(map.loadFactor());
+        //s.writeInt(map.capacity()); TODO 注释是为了让代码不报错,default访问权限只在同包
+        //s.writeFloat(map.loadFactor()); TODO 注释是为了让代码不报错,default访问权限只在同包
 
         // Write out size
         s.writeInt(map.size());
@@ -291,9 +291,9 @@ public class HashSet<E>
         // Read in HashMap capacity and load factor and create backing HashMap
         int capacity = s.readInt();
         float loadFactor = s.readFloat();
-        map = (((HashSet)this) instanceof LinkedHashSet ?
+        /*map = (((HashSet)this) instanceof LinkedHashSet ?
                new LinkedHashMap<E,Object>(capacity, loadFactor) :
-               new HashMap<E,Object>(capacity, loadFactor));
+               new HashMap<E,Object>(capacity, loadFactor));*/
 
         // Read in size
         int size = s.readInt();

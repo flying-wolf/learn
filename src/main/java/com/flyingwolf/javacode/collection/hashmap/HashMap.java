@@ -118,13 +118,13 @@ public class HashMap<K,V>
     /** 默认初始容量 **/
     static final int DEFAULT_INITIAL_CAPACITY = 16;
 
-    /** 最大容量 **/
+    /** 最大容量 2^30 **/
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
     /** 默认加载因子 **/
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
-    /** 链表,大小必须是2的N次幂 **/
+    /** HashMap的底层结果散列数组 **/
     transient Entry[] table;
 
     /** map储存键值对实际数量 **/
@@ -140,24 +140,27 @@ public class HashMap<K,V>
     transient volatile int modCount;
 
     /** 
-     * @Title:HashMap
-     * @Description:构造一个值得初始容量与加载因子的HashMap
+     * @Title:构造一个指定初始容量与加载因子的HashMap
+     * @Description:指定底层数组初始大小为initialCapacity,加载因子为loadFactor
      * @param initialCapacity
      * @param loadFactor 
      */
     public HashMap(int initialCapacity, float loadFactor) {
     	//1.初始容量检查
+    	//初始容量不能<0
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal initial capacity: " +
                                                initialCapacity);
-        if (initialCapacity > MAXIMUM_CAPACITY)//初始容量不能超过最大容量
+        //初始容量不能大于最大容量(2^30)
+        if (initialCapacity > MAXIMUM_CAPACITY)
             initialCapacity = MAXIMUM_CAPACITY;
         //2.加载因子检查
+        //加载因子必须为>0的浮点数
         if (loadFactor <= 0 || Float.isNaN(loadFactor))
             throw new IllegalArgumentException("Illegal load factor: " +
                                                loadFactor);
 
-        //3.根据初始容量找到一个最小2的n次幂的值
+        //3.根据初始容量找到一个最小2^n的值
         int capacity = 1;
         while (capacity < initialCapacity)
             capacity <<= 1;
@@ -169,20 +172,18 @@ public class HashMap<K,V>
         init();
     }
 
-    /**
-     * Constructs an empty <tt>HashMap</tt> with the specified initial
-     * capacity and the default load factor (0.75).
-     *
-     * @param  initialCapacity the initial capacity.
-     * @throws IllegalArgumentException if the initial capacity is negative.
+    /** 
+     * @Title:根据指定容量构造一个空的HashMap
+     * @Description:指定其底层数组大小为initialCapacity,加载因子默认0.75
+     * @param initialCapacity 
      */
     public HashMap(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
     }
 
-    /**
-     * Constructs an empty <tt>HashMap</tt> with the default initial capacity
-     * (16) and the default load factor (0.75).
+    /** 
+     * @Title:默认构造函数，构造一个空的HashMap
+     * @Description:底层数组初始大小为默认16(2^n),加载因子为默认0.75 
      */
     public HashMap() {
         this.loadFactor = DEFAULT_LOAD_FACTOR;
@@ -191,18 +192,17 @@ public class HashMap<K,V>
         init();
     }
 
-    /**
-     * Constructs a new <tt>HashMap</tt> with the same mappings as the
-     * specified <tt>Map</tt>.  The <tt>HashMap</tt> is created with
-     * default load factor (0.75) and an initial capacity sufficient to
-     * hold the mappings in the specified <tt>Map</tt>.
-     *
-     * @param   m the map whose mappings are to be placed in this map
-     * @throws  NullPointerException if the specified map is null
+    /** 
+     * @Title:构造一个指定Map中所有元素的HashMap
+     * @Description: 根据传入Map计算出指定底层数组初始大小,指定默认加载因子0.75
+     * 				  将指定Map中的所有key-value通过迭代器迭代添加到新的HashMap中
+     * @param m 
      */
     public HashMap(Map<? extends K, ? extends V> m) {
+    	//调用构造函数构造一个空的HashMap,并指定初始容量为(s = m.size/0.75+1) > 16 ? s : 16,指定加载因子0.75
         this(Math.max((int) (m.size() / DEFAULT_LOAD_FACTOR) + 1,
                       DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+        //迭代器迭代Map的key-value添加到新的HashMap中
         putAllForCreate(m);
     }
 
@@ -218,12 +218,12 @@ public class HashMap<K,V>
     void init() {
     }
 
-    /**
-     * Applies a supplemental hash function to a given hashCode, which
-     * defends against poor quality hash functions.  This is critical
-     * because HashMap uses power-of-two length hash tables, that
-     * otherwise encounter collisions for hashCodes that do not differ
-     * in lower bits. Note: Null keys always map to hash 0, thus index 0.
+    /** 
+     * @Title: 计算h的hash值 
+     * @Description: 根据key.hashCode计算hash值
+     * @author Ma.Chao
+     * @param h
+     * @return: int
      */
     static int hash(int h) {
         // This function ensures that hashCodes that differ only by
@@ -233,70 +233,71 @@ public class HashMap<K,V>
         return h ^ (h >>> 7) ^ (h >>> 4);
     }
 
-    /**
-     * Returns index for hash code h.
+    /** 
+     * @Title: 根据指定hash值与数组长度计算元素位置
+     * @Description:length为2^n时，h&(length – 1)相当于对length取模
+     * 				当length = 2^n时，不同的hash值发生碰撞的概率比较小，
+     * 				这样就会使得数据在table数组中分布较均匀，查询速度也较快。 
+     * @author Ma.Chao
+     * @param h
+     * @param length
+     * @return: int
      */
     static int indexFor(int h, int length) {
+    	//当length为2^n时对length取模
         return h & (length-1);
     }
 
-    /**
-     * Returns the number of key-value mappings in this map.
-     *
-     * @return the number of key-value mappings in this map
+    /* (non Javadoc) 
+     * @Title: size
+     * @Description: 得到HashMap中key-value的数量
+     * @return 
+     * @see java.util.AbstractMap#size() 
      */
     public int size() {
         return size;
     }
 
-    /**
-     * Returns <tt>true</tt> if this map contains no key-value mappings.
-     *
-     * @return <tt>true</tt> if this map contains no key-value mappings
+    /* (non Javadoc) 
+     * @Title: isEmpty
+     * @Description: 判断HashMap是否为空(size=0),为空返回true,反之返回false
+     * @return 
+     * @see java.util.AbstractMap#isEmpty() 
      */
     public boolean isEmpty() {
         return size == 0;
     }
-
+    
+    
     /**
-     * Returns the value to which the specified key is mapped,
-     * or {@code null} if this map contains no mapping for the key.
-     *
-     * <p>More formally, if this map contains a mapping from a key
-     * {@code k} to a value {@code v} such that {@code (key==null ? k==null :
-     * key.equals(k))}, then this method returns {@code v}; otherwise
-     * it returns {@code null}.  (There can be at most one such mapping.)
-     *
-     * <p>A return value of {@code null} does not <i>necessarily</i>
-     * indicate that the map contains no mapping for the key; it's also
-     * possible that the map explicitly maps the key to {@code null}.
-     * The {@link #containsKey containsKey} operation may be used to
-     * distinguish these two cases.
-     *
-     * @see #put(Object, Object)
+     * 根据指定key查找对应的value
      */
     public V get(Object key) {
+    	//如果key为null调用getForNullKey方法获取value
         if (key == null)
             return getForNullKey();
+        //计算h的hash值
         int hash = hash(key.hashCode());
+        //根据hash计算数组中的位置,并循环链表查找
         for (Entry<K,V> e = table[indexFor(hash, table.length)];
              e != null;
              e = e.next) {
             Object k;
+            //当hash相等且key值相等时返回entry对应的value
             if (e.hash == hash && ((k = e.key) == key || key.equals(k)))
                 return e.value;
         }
         return null;
     }
 
-    /**
-     * Offloaded version of get() to look up null keys.  Null keys map
-     * to index 0.  This null case is split out into separate methods
-     * for the sake of performance in the two most commonly used
-     * operations (get and put), but incorporated with conditionals in
-     * others.
+    /** 
+     * @Title: 获取key==null对应的value 
+     * @Description: 循环table数组首位的链表,查找key为null的value值并返回
+     * @author Ma.Chao
+     * @return: V
      */
     private V getForNullKey() {
+    	//循环table数组第一项中的链表,查找key==null的entry的value
         for (Entry<K,V> e = table[0]; e != null; e = e.next) {
             if (e.key == null)
                 return e.value;
@@ -304,13 +305,12 @@ public class HashMap<K,V>
         return null;
     }
 
-    /**
-     * Returns <tt>true</tt> if this map contains a mapping for the
-     * specified key.
-     *
-     * @param   key   The key whose presence in this map is to be tested
-     * @return <tt>true</tt> if this map contains a mapping for the specified
-     * key.
+    /* (non Javadoc) 
+     * @Title: containsKey
+     * @Description: TODO
+     * @param key
+     * @return 
+     * @see java.util.AbstractMap#containsKey(java.lang.Object) 
      */
     public boolean containsKey(Object key) {
         return getEntry(key) != null;
@@ -846,8 +846,9 @@ public class HashMap<K,V>
      * operations.
      */
     public Set<K> keySet() {
-        Set<K> ks = keySet;
-        return (ks != null ? ks : (keySet = new KeySet()));
+        //Set<K> ks = keySet;
+        //return (ks != null ? ks : (keySet = new KeySet()));
+    	return null;
     }
 
     private final class KeySet extends AbstractSet<K> {
@@ -882,8 +883,9 @@ public class HashMap<K,V>
      * support the <tt>add</tt> or <tt>addAll</tt> operations.
      */
     public Collection<V> values() {
-        Collection<V> vs = values;
-        return (vs != null ? vs : (values = new Values()));
+        //Collection<V> vs = values;
+        //return (vs != null ? vs : (values = new Values()));
+    	return null;
     }
 
     private final class Values extends AbstractCollection<V> {
