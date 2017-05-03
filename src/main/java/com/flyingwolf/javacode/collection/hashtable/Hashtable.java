@@ -583,9 +583,11 @@ public class Hashtable<K,V>
      * @since 1.2
      */
     public Set<K> keySet() {
-	if (keySet == null)
+    	//TODO 此处注释
+	/*if (keySet == null)
 	    keySet = Collections.synchronizedSet(new KeySet(), this);
-	return keySet;
+	return keySet;*/
+    	return null;
     }
 
     private class KeySet extends AbstractSet<K> {
@@ -623,9 +625,11 @@ public class Hashtable<K,V>
      * @since 1.2
      */
     public Set<Map.Entry<K,V>> entrySet() {
-	if (entrySet==null)
+    	//TODO 此处注释
+	/*if (entrySet==null)
 	    entrySet = Collections.synchronizedSet(new EntrySet(), this);
-	return entrySet;
+	return entrySet;*/
+    	return null;
     }
 
     private class EntrySet extends AbstractSet<Map.Entry<K,V>> {
@@ -703,10 +707,12 @@ public class Hashtable<K,V>
      * @since 1.2
      */
     public Collection<V> values() {
-	if (values==null)
+    	//TODO 此处注释
+	/*if (values==null)
 	    values = Collections.synchronizedCollection(new ValueCollection(),
                                                         this);
-        return values;
+        return values;*/
+    	return null;
     }
 
     private class ValueCollection extends AbstractCollection<V> {
