@@ -4,30 +4,35 @@ public class MainTest {
 
 	public static void main(String[] args) {
 		MallardDuck mDuck = new MallardDuck();
-		mDuck.quack();
+		mDuck.performQuack();
 		mDuck.swim();
 		mDuck.display();
-		mDuck.fly();
+		mDuck.performFly();
 		System.out.println("------------------------------------");
 		RedheadDuck rDuck = new RedheadDuck();
-		rDuck.quack();
+		rDuck.performQuack();
 		rDuck.swim();
 		rDuck.display();
-		rDuck.fly();
+		rDuck.performFly();
 		System.out.println("------------------------------------");
 		RubberDuck ruDuck = new RubberDuck();
-		ruDuck.quack();
+		ruDuck.performQuack();
 		ruDuck.swim();
 		ruDuck.display();
-		ruDuck.fly();
+		ruDuck.performFly();
 		System.out.println("------------------------------------");
 		DecoyDuck dDuck = new DecoyDuck();
-		dDuck.quack();
+		dDuck.performQuack();
 		dDuck.swim();
 		dDuck.display();
-		dDuck.fly();
-		
-	
+		dDuck.performFly();
+		System.out.println("------------------------------------");
+		ModelDuck md = new ModelDuck();
+		md.performQuack();
+		md.display();
+		md.performFly();
+		md.setFlyBehavior(new FlyRocketPowered());
+		md.performFly();
 		
 	}
 

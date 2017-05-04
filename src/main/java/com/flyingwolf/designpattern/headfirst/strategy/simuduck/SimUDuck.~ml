@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XPD:PROJECT xmlns:XPD="http://www.staruml.com" version="1">
+<XPD:HEADER>
+<XPD:SUBUNITS>
+</XPD:SUBUNITS>
+<XPD:PROFILES>
+<XPD:PROFILE>Java</XPD:PROFILE>
+<XPD:PROFILE>UMLStandard</XPD:PROFILE>
+</XPD:PROFILES>
+</XPD:HEADER>
+<XPD:BODY>
+<XPD:OBJ name="DocumentElement" type="UMLProject" guid="dwReN7lM7U67doGYijbISQAA">
+<XPD:ATTR name="Title" type="string">SimUDuck</XPD:ATTR>
+<XPD:ATTR name="Author" type="string">Flying-Wolf</XPD:ATTR>
+<XPD:ATTR name="#OwnedElements" type="integer">1</XPD:ATTR>
+<XPD:OBJ name="OwnedElements[0]" type="UMLModel" guid="DCuhp07Wnka/zuEKyd51FgAA">
+<XPD:ATTR name="Name" type="string">Model1</XPD:ATTR>
+<XPD:REF name="Namespace">dwReN7lM7U67doGYijbISQAA</XPD:REF>
+<XPD:ATTR name="#OwnedDiagrams" type="integer">1</XPD:ATTR>
+<XPD:OBJ name="OwnedDiagrams[0]" type="UMLClassDiagram" guid="wHdFkWsXyUOkXxRq0eLZ/wAA">
+<XPD:ATTR name="Name" type="string">SimUDuck</XPD:ATTR>
+<XPD:REF name="DiagramOwner">DCuhp07Wnka/zuEKyd51FgAA</XPD:REF>
+<XPD:OBJ name="DiagramView" type="UMLClassDiagramView" guid="w0fk7+0D+0SwkaL8XTLxsAAA">
+<XPD:REF name="Diagram">wHdFkWsXyUOkXxRq0eLZ/wAA</XPD:REF>
+</XPD:OBJ>
+</XPD:OBJ>
+<XPD:ATTR name="#OwnedElements" type="integer">5</XPD:ATTR>
+<XPD:OBJ name="OwnedElements[0]" type="UMLClass" guid="+IzKFns4QkCOCCQVISNoRgAA">
+<XPD:ATTR name="Name" type="string">Jung, Yoontae</XPD:ATTR>
+<XPD:REF name="Namespace">DCuhp07Wnka/zuEKyd51FgAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedElements[1]" type="UMLInterface" guid="2/kZSRO22U+yf7cE3VHX8AAA">
+<XPD:ATTR name="Name" type="string">Kim, Hyunsoo</XPD:ATTR>
+<XPD:REF name="Namespace">DCuhp07Wnka/zuEKyd51FgAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedElements[2]" type="UMLPackage" guid="yI9sElPWw0CTZWRCPT0kpAAA">
+<XPD:ATTR name="Name" type="string">com.cf</XPD:ATTR>
+<XPD:REF name="Namespace">DCuhp07Wnka/zuEKyd51FgAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedElements[3]" type="UMLClass" guid="rlFyqv8Qr0i4Z+/O1uWjtgAA">
+<XPD:ATTR name="Name" type="string">FlyBehavior</XPD:ATTR>
+<XPD:REF name="Namespace">DCuhp07Wnka/zuEKyd51FgAA</XPD:REF>
+<XPD:ATTR name="#Attributes" type="integer">1</XPD:ATTR>
+<XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="1Tkb6nh3wkGaLihYnCw6JAAA">
+<XPD:ATTR name="Name" type="string">Attribute1</XPD:ATTR>
+<XPD:REF name="Owner">rlFyqv8Qr0i4Z+/O1uWjtgAA</XPD:REF>
+</XPD:OBJ>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedElements[4]" type="UMLInterface" guid="m0lNB4I2OU2+Uo8csX/CtgAA">
+<XPD:ATTR name="Name" type="string">fr</XPD:ATTR>
+<XPD:REF name="Namespace">DCuhp07Wnka/zuEKyd51FgAA</XPD:REF>
+</XPD:OBJ>
+</XPD:OBJ>
+</XPD:OBJ>
+</XPD:BODY>
+</XPD:PROJECT>

@@ -1,14 +1,18 @@
 package com.flyingwolf.designpattern.headfirst.strategy.simuduck;
 
 public abstract class Duck {
+	FlyBehavior flyBehavior;
+	QuackBehavior quackBehavior;
+	
+	
 	/** 
 	 * @Title: 叫声 
 	 * @Description: TODO
 	 * @author Ma.Chao
 	 * @return: void
 	 */
-	public void quack(){
-		System.out.println("叫声是呱呱叫！");
+	public void performQuack(){
+		quackBehavior.quack();
 	}
 	
 	/** 
@@ -35,7 +39,7 @@ public abstract class Duck {
 	 * @author Ma.Chao
 	 * @return: void
 	 */
-	public void fly(){
-		System.out.println("鸭子会飞！");
+	public void performFly(){
+		flyBehavior.fly();
 	}
 }
