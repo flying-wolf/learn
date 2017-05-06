@@ -1,4 +1,4 @@
-package com.flyingwolf.javacode.collection.hashmap;
+package com.flyingwolf.javacode.map.hashmap;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractCollection;
