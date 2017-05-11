@@ -1,4 +1,4 @@
-package com.flyingwolf.javacode.collection.hashtable;
+package com.flyingwolf.javacode.map.hashtable;
 /*
  * %W% %E%
  *

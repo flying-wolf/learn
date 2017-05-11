@@ -1,4 +1,4 @@
-package com.flyingwolf.javacode.collection.hashtable;
+package com.flyingwolf.javacode.map.hashtable;
 
 public class HashTableDemo {
 	public static void init(){
