@@ -12,3 +12,52 @@
 
 
 二、线程方法
+	1.调整线程优先级:setPriority()和getPriority()方法分别用于设置和获取线程的优先级，线程的优先级具有继承关系；
+	2.睡眠线程：Thread.sleep(long millis)方法，使线程进入阻塞状态，millis参数设定睡眠时间，以毫秒为单位，当睡眠结束后就转入就绪状态；
+	3.线程等待：Object类的wait()方法，导致当前线程等待，直到其他线程调用此对象的notify()或notifyAll()方法唤醒该线程。
+	4.线程让步：Thread.yield()方法，是当前线程进入就绪状态，给其他相同或更高优先级的线程一个执行的机会。
+	5.线程加入：join()方法，等待其他线程终止；当前线程中调用另一个线程的join()方法，则当前线程进入阻塞状态，直到另一个线程执行结束，当前线程再由阻塞转为就绪状态。
+	6.线程唤醒：Object类的notify()或notifyAll()方法，notify()唤醒在此线程监视器上等待的单个线程，如果所有线程都在次对象上等待，则会选择其中一个线程，选择是任意性的。
+			notifyAll()唤醒在此线程监视器上等待的所有线程。
+	
+	sleep与yield方法的区别：
+		1.sleep()方法会给其他线程一个运行的机会,而不会考虑其他线程的优先级,因此会给较低优先级的线程一个运行的机会;yield()方法只会给相同或更高优先级的线程一个运行的机会。
+		2.sleep()方法会使线程转入阻塞状态,yield()方法会将线程转入就绪状态。
+		3.sleep()方法声明抛出InterruptedException异常，而yield()方法没有声明抛出任何异常。
+
+	如果希望明确的让一个线程给另一个线程运行机会，可以使用以下方法之一
+		1.让处于运行状态的线程调用Thread.sleep()方法
+		2.让处于运行状态的线程调用Thread.yield()方法
+		3.让处于运行状态的线程调用另一个线程的join()方法
+		
+三、volatile语义
+	确保volatile变量更新时以可预见的方式告知其他线程。
+	1.java储存模型不会对volatile指令的操作进行指令重排，这个保证了对volatile变量操作时是按照指令顺序执行的。
+	2.volatile变量不会被缓存在寄存器中或者其他对cpu不可见的地方，每次从主存中读取volatile变量的结果。
+	  volatile并不能保证线程安全，也就是说volatile变量操作不是原子性操作。
+
+四、Synchronized
+	Synchronized的作用主要有三个：
+		1.确保线程互斥的访问同步代码。
+		2.保证共享变量的修改能够及时可见。
+		3.有效的解决重排序问题。
+		
+	Synchronized语法共有三种用法：
+		1.修饰普通方法
+		2.修饰静态方法
+		3.修饰代码块
+		
+	Synchronized实现原理：
+		Synchronized编译后会生成两条指令monitorenter和monitorexit
+		monitorenter:每个对象拥有一个监视器锁（monitor），当monitor被占用时就会处于锁定状态。
+					  线程执行monitorenter命令是尝试获取monitor所有权过程如下
+					 1).如果monitor进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的持有者。
+					 2).如果该线程已经占有了monitor，只是重新进入，则进入数+1.
+					 3).如果其他线程已经占用了monitor，则该线程进入阻塞状态，知道monitor的进入数为0时在尝试获取monitor的所有权。
+		
+		monitorexit:指令执行时，monitor的进入数-1，当monitor的进入数为0，那么线程退出monitor，不再是这个monitor的持有者。
+					其他被这个monitor阻塞的线程可以尝试获取这个monitor的所有权。
+
+五、ReentrantLock
+	
+	
