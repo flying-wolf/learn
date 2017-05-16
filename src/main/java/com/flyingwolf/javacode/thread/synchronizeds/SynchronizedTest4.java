@@ -1,7 +1,5 @@
 package com.flyingwolf.javacode.thread.synchronizeds;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 public class SynchronizedTest4 {
 	
 	public void method1(){
