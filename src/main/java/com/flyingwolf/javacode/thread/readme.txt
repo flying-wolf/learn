@@ -59,5 +59,30 @@
 					其他被这个monitor阻塞的线程可以尝试获取这个monitor的所有权。
 
 五、ReentrantLock
+	ReentrantLock是基于AbstractQueuedSynchronizer实现的,AbstractQueuedSynchronizer可以实现独占锁也可以实现共享锁,
+	ReentrantLock只是使用了其中的独占锁模式。
+
+	类结构：
+		ReentrantLock-->Lock
+		NonfairSync/FairSync-->Sync-->AbstractQueuedSynchronizer-->AbstractOwnableSynchronizer
+		NonfairSync/FairSync-->Sync是ReentrantLock的三个内部类
+		Node是AbstractQueuedSynchronizer的内部类
+		
+	公平锁与非公平锁(默认使用非公平锁)：
+		state:锁数量 volatile类型
+		非公平锁(后进来的线程也能先执行)——new ReentrantLock() || new ReentrantLock(false);
+			lock()方法的核心步骤：基于CAS尝试将state(锁数量)从0设置为1
+				A.如果设置成功，设置当前线程为独占锁线程。
+				B.如果设置失败，在重新获取一次锁数量。
+				B1.如果锁数量为0，在基于CAS将state(锁数量)从0设置为1一次，如果成功则设置当前线程为独占锁线程。
+				B2.如果锁数量不为0或者B1操作又失败了，检查当前线程是否已经是独占锁线程，如果是，则将当前锁数量+1；
+					如果不是，则将当前线程封装到一个Node内，并加入等待队列中去，等待被其前一个线程节点唤醒。
+	
+		公平锁(先进来的线程先执行)——new ReentrantLock(true);
+			lock()方法的核心步骤：获取一次state(锁数量)
+				B1.如果锁数量为0并且当前线程是等待队列中的头节点，基于CAS将state(锁数量)从0设置为1，如果设置成功，设置当前线程为独占锁线程。
+				B2.如果锁数量不为0或当前线程不是等待队列中的头节点或者B1操作失败，检查当前线程是否为独占锁线程，如果是，则将当前锁数量+1；
+					如果不是，则将当前线程封装到一个Node内，并加入到等待队列中去，等待被其前一个线程节点唤醒。
+	
 	
 	
